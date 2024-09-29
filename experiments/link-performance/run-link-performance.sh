@@ -36,7 +36,7 @@ control_c()
 trap control_c SIGINT
 
 dirname=link-performance
-if test ! -f ../../../../waf ; then
+if test ! -f ../../../../ns3 ; then
     echo "please run this program from within the directory `dirname $0`, like this:"
     echo "cd `dirname $0`"
     echo "./`basename $0`"
@@ -95,7 +95,7 @@ stepSize=5
 # Echo remaining commands to standard output, to track progress
 set -x
 for distance in `seq $minDistance $stepSize $maxDistance`; do
-  ./waf --run "link-performance --maxPackets=${maxPackets} --transmitPower=${transmitPower} --noisePower=${noisePower} --distance=${distance} --metadata=${distance} --RngRun=${RngRun}"
+  ./ns3 run "link-performance --maxPackets=${maxPackets} --transmitPower=${transmitPower} --noisePower=${noisePower} --distance=${distance} --metadata=${distance} --RngRun=${RngRun}"
 done
 
 # Move files from top level directory to the experiments directory
@@ -112,7 +112,7 @@ fi
 # Specify where the columns of data are to plot.  Here, the xcolumn data
 # (distance) is in column 5, the y column data (PER) in column 3, and the
 # length of the error bar is in column 4 
-/usr/bin/python ../utils/plot-lines-with-error-bars.py --title="${plotTitle}" --xlabel='distance (m)' --ylabel='Packet Error Ratio (PER)' --xcol=5 --ycol=3 --yerror=4 --fileName=link-performance-summary.dat --plotName=${plotName}
+/usr/bin/python3 ../utils/plot-lines-with-error-bars.py --title="${plotTitle}" --xlabel='distance (m)' --ylabel='Packet Error Ratio (PER)' --xcol=5 --ycol=3 --yerror=4 --fileName=link-performance-summary.dat --plotName=${plotName}
 
 # If script has succeeded to this point, create the results directory
 mkdir -p ${resultsDir}
