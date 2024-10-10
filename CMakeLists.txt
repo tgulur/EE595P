@@ -3,6 +3,7 @@ set(source_files
     model/snr-per-error-model.cc
     model/simple-wireless-net-device.cc
     model/simple-wireless-channel.cc
+    model/bernoulli_packet_socket_client.cc
     )
 
 set(header_files
@@ -10,6 +11,7 @@ set(header_files
     model/snr-per-error-model.h
     model/simple-wireless-channel.h
     model/simple-wireless-net-device.h
+    model/bernoulli_packet_socket_client.h
     )
 
 
