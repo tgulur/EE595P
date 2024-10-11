@@ -43,7 +43,7 @@ def main():
     for lam in range(min_lambda, max_lambda + 1, step_size):
         lambda_val = 10 ** lam
         lambdas.append(lambda_val)
-        cmd = f"./ns3 run 'single-bss-sld --rngRun={rng_run} --payloadSize={max_packets} --sldLink1PerNodeLambda={lambda_val}'"
+        cmd = f"./ns3 run 'single-bss-sld --rngRun={rng_run} --payloadSize={max_packets} --perSldLambda={lambda_val}'"
         subprocess.run(cmd, shell=True)
 
     # draw plots
