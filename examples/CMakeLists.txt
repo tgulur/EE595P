@@ -19,3 +19,14 @@ build_lib_example(
     ${libwifi}
     ${libsimplewireless}
 )
+
+build_lib_example(
+  NAME single-bss-mld
+  SOURCE_FILES single-bss-mld.cc
+  LIBRARIES_TO_LINK
+    ${libcore}
+    ${libmobility}
+    ${libnetwork}
+    ${libwifi}
+    ${libsimplewireless}
+)
