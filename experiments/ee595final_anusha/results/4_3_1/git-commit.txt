@@ -1,0 +1,8 @@
+commit e08ae6eaa9581a93c49e50bbe0680f23ff39a801
+Author: AlessioBugetti <alessiobugetti98@gmail.com>
+Date:   Wed Aug 14 17:32:32 2024 +0200
+
+    internet: (fixes #1109) Add support for multiple hardware types in ArpHeader
+
+src/internet/model/arp-header.cc
+src/internet/model/arp-header.h
