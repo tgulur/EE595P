@@ -149,9 +149,9 @@ main(int argc, char* argv[])
     uint8_t acBECwStage{6};
     uint64_t acBKCwmin{16};
     uint8_t acBKCwStage{6};
-    uint64_t acVICwmin{16};
-    uint8_t acVICwStage{6};
-    uint64_t acVOCwmin{16};
+    uint64_t acVICwmin{16}; // Youtube video
+    uint8_t acVICwStage{6}; // Youtube video
+    uint64_t acVOCwmin{16}; // Teleconference
     uint8_t acVOCwStage{6};
 
     CommandLine cmd(__FILE__);
@@ -170,7 +170,7 @@ main(int argc, char* argv[])
     // cmd.AddValue("acBKCwmin", "Initial CW for AC_BK", acBKCwmin);
     // cmd.AddValue("acBKCwStage", "Cutoff Stage for AC_BK", acBKCwStage);
     // cmd.AddValue("acVICwmin", "Initial CW for AC_VI", acVICwmin);
-    // cmd.AddValue("acVICwStage", "Cutoff Stage for AC_VI", acVICwStage);
+    // cmd.AddValue("acVICwStage", "Cutoff Stage for AC_VI", acVICwStage); // Can bring it back as needed 
     // cmd.AddValue("acVOCwmin", "Initial CW for AC_VO", acVOCwmin);
     // cmd.AddValue("acVOCwStage", "Cutoff Stage for AC_VO", acVOCwStage);
     cmd.Parse(argc, argv);
@@ -301,7 +301,7 @@ main(int argc, char* argv[])
     Config::Set("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/HeConfiguration/GuardInterval",
                 TimeValue(NanoSeconds(gi)));
 
-    if (!unlimitedAmpdu)
+    if (!unlimitedAmpdu) // Validation parameter which can be changed like how long you want to send out the frame
     {
         Config::Set("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/BE_MaxAmpduSize",
                     UintegerValue(maxMpdusInAmpdu * (payloadSize + 50)));

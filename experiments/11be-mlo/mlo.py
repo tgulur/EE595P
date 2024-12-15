@@ -35,19 +35,20 @@ def main():
     # Experiment parameters
     rng_run = 1
     max_packets = 1500
-    min_lambda = -5
-    max_lambda = -2
+    min_lambda = -10
+    max_lambda = -1
     step_size = 1
     lambdas = []
+    nStas = 30
     # Run the ns3 simulation for each distance
     for lam in range(min_lambda, max_lambda + 1, step_size):
         lambda_val = 10 ** lam
         lambdas.append(lambda_val)
-        cmd = f"./ns3 run 'single-bss-mld --rngRun={rng_run} --payloadSize={max_packets} --mldPerNodeLambda={lambda_val}'"
+        cmd = f"./ns3 run 'single-bss-mld --rngRun={rng_run} --payloadSize={max_packets} --mldPerNodeLambda={lambda_val} --nMldSta={nStas}'"
         subprocess.run(cmd, shell=True)
 
     # draw plots
-    plt.figure()
+    plt.figure(1)
     plt.title('Throughput vs. Offered Load')
     plt.xlabel('Offered Load')
     plt.ylabel('Throughput (Mbps)')
@@ -56,6 +57,19 @@ def main():
     throughput_l1 = []
     throughput_l2 = []
     throughput_total = []
+
+    e2edelay_l1 = []
+    e2edelay_l2 = []
+    e2e_delay_total = []
+
+    queuedelay_l1 = []
+    queuedelay_l2 = []
+    queuedelay_total = []
+
+    accdelay_l1 = []
+    accdelay_l2 = []
+    accdelay_total = []
+
     with open('wifi-mld.dat', 'r') as f:
         lines = f.readlines()
         for line in lines:
@@ -63,10 +77,62 @@ def main():
             throughput_l1.append(float(tokens[3]))
             throughput_l2.append(float(tokens[4]))
             throughput_total.append(float(tokens[5]))
+
+            e2edelay_l1.append(float(tokens[12]))
+            e2edelay_l2.append(float(tokens[13]))
+            e2e_delay_total.append(float(tokens[14]))
+
+            queuedelay_l1.append(float(tokens[6]))
+            queuedelay_l2.append(float(tokens[7]))
+            queuedelay_total.append(float(tokens[8]))
+
+            accdelay_l1.append(float(tokens[9]))       
+            accdelay_l2.append(float(tokens[10]))
+            accdelay_total.append(float(tokens[11]))     
+
+
     plt.plot(lambdas, throughput_l1, marker='o')
     plt.plot(lambdas, throughput_l2, marker='x')
     plt.plot(lambdas, throughput_total, marker='^')
-    plt.savefig(os.path.join(results_dir, 'wifi-mld.png'))
+    plt.savefig(os.path.join(results_dir, 'wifi-mld-15stas.png'))
+
+    # plt.figure(2)
+    # plt.title('E2E Delay vs. Offered Load')
+    # plt.xlabel('Offered Load')
+    # plt.ylabel('E2E Delay')
+    # plt.grid()
+    # plt.xscale('log')
+    # plt.plot(lambdas, e2edelay_l1, marker = 'o')
+    # plt.plot(lambdas, e2edelay_l2, marker='x')
+    # plt.plot(lambdas, e2e_delay_total, marker='^')
+    # plt.savefig(os.path.join(results_dir,'wifi-e2e.png'))
+
+    # plt.figure(3)
+    # plt.title('Queue Delay vs. Offered Load')
+    # plt.xlabel('Offered Load')
+    # plt.ylabel('Queue Delay')
+    # plt.grid()
+    # plt.xscale('log')
+    # plt.plot(lambdas, queuedelay_l1, marker = 'o')
+    # plt.plot(lambdas, queuedelay_l2, marker='x')
+    # plt.plot(lambdas, queuedelay_total, marker='^')
+    # plt.savefig(os.path.join(results_dir,'wifi-queue.png'))
+
+    # plt.figure(4)
+    # plt.title('Access Delay vs. Offered Load')
+    # plt.xlabel('Offered Load')
+    # plt.ylabel('Access Delay')
+    # plt.grid()
+    # plt.xscale('log')
+    # plt.plot(lambdas, accdelay_l1, marker = 'o')
+    # plt.plot(lambdas, accdelay_l2, marker='x')
+    # plt.plot(lambdas, accdelay_total, marker='^')
+    # plt.savefig(os.path.join(results_dir,'wifi-acc.png'))
+
+
+
+    
+
     # Move result files to the experiment directory
     move_file('wifi-mld.dat', results_dir)
 

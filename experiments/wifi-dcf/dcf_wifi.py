@@ -35,19 +35,20 @@ def main():
     # Experiment parameters
     rng_run = 1
     max_packets = 1500
-    min_lambda = -4
+    min_lambda = -10
     max_lambda = -1
     step_size = 1
     lambdas = []
+    # stas = 20
     # Run the ns3 simulation for each distance
     for lam in range(min_lambda, max_lambda + 1, step_size):
         lambda_val = 10 ** lam
         lambdas.append(lambda_val)
-        cmd = f"./ns3 run 'single-bss-sld --rngRun={rng_run} --payloadSize={max_packets} --perSldLambda={lambda_val}'"
+        cmd = f"./ns3 run 'single-bss-sld --rngRun={rng_run} --payloadSize={max_packets} --perSldLambda={lambda_val} ----acBECwmin{3}'"
         subprocess.run(cmd, shell=True)
 
     # draw plots
-    plt.figure()
+    plt.figure(1)
     plt.title('Throughput vs. Offered Load')
     plt.xlabel('Offered Load')
     plt.ylabel('Throughput (Mbps)')
@@ -61,6 +62,55 @@ def main():
             throughput.append(float(tokens[1]))
     plt.plot(lambdas, throughput, marker='o')
     plt.savefig(os.path.join(results_dir, 'wifi-dcf.png'))
+
+
+    plt.figure(2)
+    plt.title('E2E Delay vs. Offered Load')
+    plt.xlabel('Offered Load')
+    plt.ylabel('E2E Delay')
+    plt.grid()
+    plt.xscale('log')
+    e2e_delay = []
+    with open('wifi-dcf.dat', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            tokens = line.split(',')
+            e2e_delay.append(float(tokens[4]))
+    plt.plot(lambdas, e2e_delay, marker='o')
+    plt.savefig(os.path.join(results_dir, 'wifi-dcf-e2e.png'))
+
+    plt.figure(3)
+    plt.title('Queueing Delay vs. Offered Load')
+    plt.xlabel('Offered Load')
+    plt.ylabel('Queueing Delay')
+    plt.grid()
+    plt.xscale('log')
+    queueing_delay = []
+    with open('wifi-dcf.dat', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            tokens = line.split(',')
+            queueing_delay.append(float(tokens[2]))
+    plt.plot(lambdas, queueing_delay, marker='o')
+    plt.savefig(os.path.join(results_dir, 'wifi-dcf-queue.png'))
+
+    plt.figure(4)
+    plt.title('Access Delay vs. Offered Load')
+    plt.xlabel('Offered Load')
+    plt.ylabel('Access Delay')
+    plt.grid()
+    plt.xscale('log')
+    access_delay = []
+    with open('wifi-dcf.dat', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            tokens = line.split(',')
+            access_delay.append(float(tokens[3]))
+    plt.plot(lambdas, access_delay, marker='o')
+    plt.savefig(os.path.join(results_dir, 'wifi-dcf-access.png'))
+
+
+
     # Move result files to the experiment directory
     move_file('wifi-dcf.dat', results_dir)
 

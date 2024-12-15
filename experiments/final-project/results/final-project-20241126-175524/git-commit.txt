@@ -1,0 +1,7 @@
+commit 02e852852c7718bec0cdb15ae117f070d7ddb3f5
+Author: Tom Henderson <tomh@tomh.org>
+Date:   Sat Oct 12 09:13:11 2024 -0700
+
+    doc: Clarify CMake options for macOS
+
+doc/installation/source/macos.rst
